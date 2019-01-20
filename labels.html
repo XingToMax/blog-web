@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta name="author" content="Tomax,undefined">
+    <meta name="copyright" content="Tomax">
+    <title>Tags</title>
+    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+    <link rel="dns-prefetch" href="https://cdn.staticfile.org">
+    <link rel="dns-prefetch" href="https://cdn.bootcss.com">
+    <link rel="dns-prefetch" href="https://creativecommons.org">
+    <style>
+        a:hover {
+            cursor: pointer
+        }
+    </style>
+</head>
+
+<body><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i>
+    <div id="sidebar">
+        <div class="author-info">
+            <div class="author-info__avatar text-center"><img id="avatar"></div>
+            <div class="author-info__name text-center" id="username">Tomax</div>
+            <div class="author-info__description text-center" id="signature">不忘初心， 方得始终</div>
+            <hr>
+            <div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="timeline.html"><span class="pull-left">Articles</span><span class="pull-right" id="sum-blog">52</span></a>
+                <a class="author-info-articles__tags article-meta" href="labels.html"><span class="pull-left">Tags</span><span class="pull-right" id="sum-label"></span></a>
+                <a class="author-info-articles__categories article-meta" href="categories.html"><span class="pull-left">Categories</span><span class="pull-right" id="sum-cls"></span></a>
+            </div>
+            <hr>
+            <div class="author-info-links">
+                <div class="author-info-links__title text-center">友情链接</div>
+                <div id="link-container"></div>
+            </div>
+        </div>
+    </div>
+    <nav id="nav" style="">
+        <div id="page-header"><span class="pull-left"> <a id="site-name" href="index.html">Tomax</a></span><i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i>
+            <span class="pull-right menus">
+                <a class="site-page" href="index.html">主页</a>
+                <a class="site-page" href="timeline.html">时间轴</a><a class="site-page" href="labels.html">标签</a>
+                <a class="site-page" href="categories.html">分类</a>
+                <a class="site-page" href="resource.html">资源</a>
+                <a class="site-page" href="about.html">关于</a>
+            </span>
+        </div>
+        <div id="site-info">
+            <div id="site-title">Tomax</div>
+            <div id="site-sub-title">不 忘 初 心 ，方 得 始 终</div>
+            <div id="site-social-icons"> <a class="social-icon" href="https://github.com/XingToMax" target="_blank"><i class="fa fa-github"></i></a></div>
+
+        </div>
+    </nav>
+    <div id="content-outer">
+        <div class="layout" id="content-inner" style="opacity: 1; display: block; transform: translateY(0px);">
+            <div class="tag-cloud">
+                <div class="tag-cloud__title">Tags - <span class="tag-cloud__amount" id="tag-count"></span></div>
+                <div class="tag-cloud-tags" id="tag-container"></div>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <div class="layout" id="footer">
+            <div class="copyright">&copy;2017 - 2018 By Tomax</div>
+        </div>
+    </footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i>
+    <script src="js/host.js"></script>
+    <script src="js/third-party/anime.min.js"></script>
+    <script src="js/third-party/jquery.min.js"></script>
+    <script src="js/third-party/jquery.fancybox.min.js"></script>
+    <script src="js/third-party/velocity.min.js"></script>
+    <script src="js/third-party/velocity.ui.min.js"></script>
+    <script src="js/utils.js?version=1.5.3"></script>
+    <script src="js/fancybox.js?version=1.5.3"></script>
+    <script src="js/sidebar.js?version=1.5.3"></script>
+    <!-- <script src="js/copy.js?version=1.5.3"></script> -->
+    <script src="js/fireworks.js?version=1.5.3"></script>
+    <script src="js/transition.js?version=1.5.3"></script>
+    <script src="js/scroll.js?version=1.5.3"></script>
+    <script src="js/head.js?version=1.5.3"></script>
+</body>
+<script>
+    var property = [{
+        fontSize: '12px',
+        color: '#222831'
+    }, {
+        fontSize: '15px',
+        color: '#444951'
+    }, {
+        fontSize: '18px',
+        color: '#666a70'
+    }, {
+        fontSize: '24px',
+        color: '#aaacaf'
+    }, {
+        fontSize: '27px',
+        color: '#cccdcf'
+    }, {
+        fontSize: '30px',
+        color: '#eee'
+    }, ]
+    $.get(HOST + '/api/label', result => {
+        var tagHtml = ''
+        result.array.forEach(element => {
+            var level = Math.ceil(element.count / 2)
+            level = level > 5 ? 5 : level
+            var prop = property[level]
+            tagHtml += '<a href="label.html?labelName=' + element.name + '" style="font-size:' + prop.fontSize + ';color:' + prop.color + '">'
+            tagHtml += element.name
+            tagHtml += '</a>'
+        })
+        $('#tag-container').html(tagHtml)
+        $('#tag-count').html(result.count)
+    })
+</script>
+<script src="js/userinfo.js"></script>
+
+</html>

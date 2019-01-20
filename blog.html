@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta name="author" content="Tomax,undefined">
+    <meta name="copyright" content="Tomax">
+    <title>Marked in the browser</title>
+    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+    <link rel="dns-prefetch" href="https://cdn.staticfile.org">
+    <link rel="dns-prefetch" href="https://cdn.bootcss.com">
+    <link rel="dns-prefetch" href="https://creativecommons.org">
+    <style>
+        .image-container {
+            text-align: center;
+        }
+        
+        .pre-container {
+            padding: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <i class="fa fa-arrow-right on" id="toggle-sidebar" aria-hidden="true" style="color: rgb(153, 169, 191); transform: rotateZ(180deg);"></i>
+    <div id="sidebar" style="transform: translateX(300px);">
+        <div class="toggle-sidebar-info text-center"><span data-toggle="Toggle article">Toggle site</span>
+            <hr>
+        </div>
+        <div class="sidebar-toc">
+            <div class="sidebar-toc__title">Catalog</div>
+            <div class="sidebar-toc__progress"><span class="progress-notice">You've read</span><span class="progress-num">11</span><span class="progress-percentage">%</span>
+                <div class="sidebar-toc__progress-bar" style="width: calc(0px + 11%);"></div>
+            </div>
+            <div class="sidebar-toc__content" id="toc-container"></div>
+        </div>
+
+        <div class="author-info hide" style="opacity: 0; display: none; transform: translateX(-20px);">
+            <div class="author-info__avatar text-center"><img id="avatar"></div>
+            <div class="author-info__name text-center" id="username">Tomax</div>
+            <div class="author-info__description text-center" id="signature">不忘初心， 方得始终</div>
+            <hr>
+            <div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="timeline.html"><span class="pull-left">Articles</span><span class="pull-right" id="sum-blog">52</span></a>
+                <a class="author-info-articles__tags article-meta" href="labels.html"><span class="pull-left">Tags</span><span class="pull-right" id="sum-label"></span></a>
+                <a class="author-info-articles__categories article-meta" href="categories.html"><span class="pull-left">Categories</span><span class="pull-right" id="sum-cls"></span></a>
+            </div>
+            <hr>
+            <div class="author-info-links">
+                <div class="author-info-links__title text-center">友情链接</div>
+                <div id="link-container"></div>
+            </div>
+        </div>
+    </div>
+    <div id="content-outer">
+        <div class="plain" id="top-container" style="opacity: 1; display: block;">
+            <div id="page-header" class="open-sidebar">
+                <span class="pull-left"> <a id="site-name" href="index.html">Tomax</a></span>
+                <i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i>
+                <span class="pull-right menus">
+                            <a class="site-page" href="index.html">主页</a>
+                            <a class="site-page" href="timeline.html">时间轴</a><a class="site-page" href="labels.html">标签</a>
+                            <a class="site-page" href="categories.html">分类</a>
+                            <a class="site-page" href="resource.html">资源</a>
+                            <a class="site-page" href="about.html">关于</a>
+                        </span>
+            </div>
+        </div>
+        <div class="layout" id="content-inner" style="opacity:1;display:block;transform:translateY(0px)">
+            <article id="post">
+                <div class="plain" id="post-title"></div>
+                <div id="post-meta"><time class="post-meta__date" id="publish-time"><i class="fa fa-calendar" aria-hidden="true"></i> </time><span class="post-meta__separator">|</span><i class="fa fa-inbox" aria-hidden="true"></i>
+                    <a class="post-meta__categories" id="classification">
+                    </a>
+                    <span class="post-meta__separator">|</span><span class="post-meta-wordcount"><span>Word count: </span><span class="word-count">1,205</span><span class="post-meta__separator">|</span><span>Reading time: 5 min</span></span>
+                </div>
+                <div id="post-content"></div>
+            </article>
+            <div class="post-copyright">
+                <div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="mailto:undefined">Tomax</a></span></div>
+                <div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="" id="copy-link"></a></span></div>
+                <div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div>
+            </div>
+            <div class="post-meta__tag-list" id="labelContainer"></div>
+            <!-- <nav id="pagination">
+                    <div class="next-post pull-right"><a href="#"><span>nextPage</span><i class="fa fa-chevron-right"></i></a></div>
+                </nav> -->
+        </div>
+
+    </div>
+    <footer>
+        <div class="layout" id="footer" style="opacity: 1; display: block; transform: translateY(0px);">
+            <div class="copyright">©2018 - 2019 By Tomax</div>
+        </div>
+    </footer>
+    <i class="fa fa-arrow-up" id="go-up" aria-hidden="true" style="transform: rotateZ(360deg) translateX(-30px); opacity: 1;"></i>
+    <script src="js/host.js"></script>
+    <script src="js/marked.min.js"></script>
+    <script src="js/highlight.pack.js"></script>
+    <script src="js/third-party/anime.min.js"></script>
+    <script src="js/third-party/jquery.min.js"></script>
+    <script src="js/third-party/jquery.fancybox.min.js"></script>
+    <script src="js/third-party/velocity.min.js"></script>
+    <script src="js/third-party/velocity.ui.min.js"></script>
+    <script src="js/utils.js?version=1.5.3"></script>
+    <script src="js/fancybox.js?version=1.5.3"></script>
+    <script src="js/sidebar.js?version=1.5.3"></script>
+    <script src="js/fireworks.js?version=1.5.3"></script>
+    <script src="js/transition.js?version=1.5.3"></script>
+    <script src="js/scroll.js?version=1.5.3"></script>
+    <script src="js/head.js?version=1.5.3"></script>
+    <script>
+        var url = window.location.href
+        var id = 0
+        if (url.indexOf('id=') !== -1) {
+            id = parseInt(url.split('id=')[1])
+        } else {
+            alert('未找到该文章')
+            window.location.href = 'index.html'
+        }
+        let tocList = []
+        let renderer = new marked.Renderer();
+        renderer.image = (href, title, text) => {
+            if (title === null) {
+                let imgHtml = '<a href="' + href + '" data-fancybox="group" data-caption="">'
+                imgHtml += '<img src="' + href + '" alt>'
+                imgHtml += '</a>'
+                return imgHtml
+            }
+            let imgHtml = '<a href="' + href + '" data-fancybox="group" data-caption="' + title + '">'
+            imgHtml += '<img src="' + href + '" alt="' + title + '">'
+            imgHtml += '<div class="img-alt">' + title + '</div>'
+            imgHtml += '</a>'
+            return imgHtml
+        }
+        renderer.heading = (text, level) => {
+                tocList.push({
+                    level: level,
+                    title: text,
+                    id: '#' + text
+                })
+                return '<h' + level + ' id="' + text + '"><a name="' +
+                    text +
+                    '" class="anchor" href="#' +
+                    text +
+                    '"><span class="header-link"></span></a>' +
+                    text + '</h' + level + '>';
+            }
+            // renderer.code = (code, lang) => {
+            //     console.log(code)
+            //     console.log(lang)
+            // }
+        marked.setOptions({
+            highlight: function(code) {
+                return hljs.highlightAuto(code).value;
+            }
+        });
+        marked.setOptions({
+            renderer: renderer,
+            tables: true,
+            breaks: false,
+            pedantic: false,
+            sanitize: false,
+            smartLists: true,
+            smartypants: false
+        });
+
+
+        $.get(HOST + '/api/blog/' + id, data => {
+            document.title = data.data.name
+            $('#post-title').html(data.data.name)
+            $('#classification').html(data.data.classificationName)
+            $('#classification').attr('href', 'category.html?id=' + data.data.classification)
+            var timeElement = document.getElementById('publish-time')
+            timeElement.innerHTML += data.data.time.split('T')[0]
+
+            var labels = data.data.labels.split(';')
+            var labelHtml = ''
+            for (var i = 0; i < labels.length; i++) {
+                labelHtml += '<a class="post-meta__tags" href="label.html?labelName=' + labels[i] + '">' + labels[i] + '</a>'
+            }
+            $('#labelContainer').html(labelHtml);
+
+            let content = marked(data.data.markdownContent);
+
+            document.getElementById('post-content').innerHTML = content;
+
+            // create toc tree
+            let tocHtml = '<ol class="toc">';
+            let rootNode = buildTreeData()
+            if (rootNode.children.length > 0) {
+                let createNode = (level, suffix, node) => {
+                    let index = 1;
+                    node.children.forEach(e => {
+                        tocHtml += '<li class="toc-item toc-level-"' + level + '>'
+                        tocHtml += '<a class="toc-link" href="' + e.id + '">'
+                        tocHtml += '<span class="toc-number">' + suffix + index + ' </span>'
+                        tocHtml += '<span class="toc-text">' + e.title + '</span>'
+                        tocHtml += '</a>'
+                        if (e.children.length > 0) {
+                            tocHtml += '<ol class="toc-child" style="display: none; opacity: 1;">'
+                            createNode(level + 1, suffix + index + ".", e)
+                            tocHtml += '</ol>'
+                        }
+                        tocHtml += '</li>'
+                        index++
+                    })
+                }
+                createNode(1, '', rootNode)
+            }
+            tocHtml += '</ol>'
+            $('#toc-container').html(tocHtml)
+
+            function buildTreeData() {
+                let root = {
+                    level: 0,
+                    children: [],
+                };
+                let preNode = root
+                preNode.father = root
+                tocList.forEach(e => {
+                    if (e.level > preNode.level) {
+                        let node = {
+                            level: e.level,
+                            title: e.title,
+                            id: e.id,
+                            father: preNode,
+                            children: []
+                        };
+                        preNode.children.push(node)
+                        preNode = node;
+                    } else if (e.level === preNode.level) {
+                        let node = {
+                            level: e.level,
+                            title: e.title,
+                            id: e.id,
+                            father: preNode.father,
+                            children: []
+                        };
+                        preNode.father.children.push(node)
+                        preNode = node
+                    } else {
+                        while (e.level < preNode.level && preNode.level !== 0) {
+                            preNode = preNode.father
+                        }
+                        let node = {
+                            level: e.level,
+                            title: e.title,
+                            id: e.id,
+                            father: preNode.father,
+                            children: []
+                        };
+                        preNode.father.children.push(node)
+                        preNode = node
+                    }
+                })
+                return root
+            }
+
+            $('#toggle-sidebar').click()
+
+            // 高亮处理
+            var codeList = $("span[class^='hljs-']")
+            for (var i = 0; i < codeList.length; i++) {
+                var cls = $(codeList[i]).attr('class')
+                $(codeList[i]).attr('class', cls.replace("hljs-", ""))
+            }
+            var preList = $('pre')
+            for (var i = 0; i < preList.length; i++) {
+                var preNode = $(preList[i])
+                preNode.addClass('highlight pre-container')
+                preNode.html('' + preNode.html())
+            }
+
+        })
+    </script>
+    <!-- <script src="js/copy.js?version=1.5.3"></script> -->
+    <script src="js/userinfo.js"></script>
+</body>
+
+</html>

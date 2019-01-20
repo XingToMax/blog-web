@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta name="author" content="Tomax,undefined">
+    <meta name="copyright" content="Tomax">
+    <title>Tags</title>
+    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+    <link rel="dns-prefetch" href="https://cdn.staticfile.org">
+    <link rel="dns-prefetch" href="https://cdn.bootcss.com">
+    <link rel="dns-prefetch" href="https://creativecommons.org">
+    <style>
+        a:hover {
+            cursor: pointer
+        }
+    </style>
+</head>
+
+<body><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i>
+    <div id="sidebar">
+        <div class="author-info">
+            <div class="author-info__avatar text-center"><img id="avatar"></div>
+            <div class="author-info__name text-center" id="username">Tomax</div>
+            <div class="author-info__description text-center" id="signature">不忘初心， 方得始终</div>
+            <hr>
+            <div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="timeline.html"><span class="pull-left">Articles</span><span class="pull-right" id="sum-blog">52</span></a>
+                <a class="author-info-articles__tags article-meta" href="labels.html"><span class="pull-left">Tags</span><span class="pull-right" id="sum-label"></span></a>
+                <a class="author-info-articles__categories article-meta" href="categories.html"><span class="pull-left">Categories</span><span class="pull-right" id="sum-cls"></span></a>
+            </div>
+            <hr>
+            <div class="author-info-links">
+                <div class="author-info-links__title text-center">友情链接</div>
+                <div id="link-container"></div>
+            </div>
+        </div>
+    </div>
+    <nav id="nav" style="">
+        <div id="page-header"><span class="pull-left"> <a id="site-name" href="index.html">Tomax</a></span><i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i>
+            <span class="pull-right menus">
+                <a class="site-page" href="index.html">主页</a>
+                <a class="site-page" href="timeline.html">时间轴</a><a class="site-page" href="labels.html">标签</a>
+                <a class="site-page" href="categories.html">分类</a>
+                <a class="site-page" href="resource.html">资源</a>
+                <a class="site-page" href="about.html">关于</a>
+            </span>
+        </div>
+        <div id="site-info">
+            <div id="site-title">Tomax</div>
+            <div id="site-sub-title">不 忘 初 心 ，方 得 始 终</div>
+            <div id="site-social-icons"> <a class="social-icon" href="https://github.com/XingToMax" target="_blank"><i class="fa fa-github"></i></a></div>
+
+        </div>
+    </nav>
+    <div id="content-outer">
+        <div class="layout">
+            <div class="post-content">
+                <div class="category__title">
+                    <h1 id="labelName" style="text-align:center"></h1>
+                </div>
+            </div>
+            <div id="content-inner"></div>
+            <nav id="pagination">
+                <div class="pagination" id="page-container"></div>
+            </nav>
+        </div>
+    </div>
+    <footer>
+        <div class="layout" id="footer">
+            <div class="copyright">&copy;2017 - 2018 By Tomax</div>
+        </div>
+    </footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i>
+    <script src="js/host.js"></script>
+    <script src="js/third-party/anime.min.js"></script>
+    <script src="js/third-party/jquery.min.js"></script>
+    <script src="js/third-party/jquery.fancybox.min.js"></script>
+    <script src="js/third-party/velocity.min.js"></script>
+    <script src="js/third-party/velocity.ui.min.js"></script>
+    <script src="js/utils.js?version=1.5.3"></script>
+    <script src="js/fancybox.js?version=1.5.3"></script>
+    <script src="js/sidebar.js?version=1.5.3"></script>
+    <!-- <script src="js/copy.js?version=1.5.3"></script> -->
+    <script src="js/fireworks.js?version=1.5.3"></script>
+    <script src="js/transition.js?version=1.5.3"></script>
+    <script src="js/scroll.js?version=1.5.3"></script>
+    <script src="js/head.js?version=1.5.3"></script>
+</body>
+<script>
+    var url = window.location.href
+    if (url.indexOf('labelName=') === -1) {
+        alert('invalid url')
+        window.location.href = 'labels.html'
+    }
+
+    var label = url.split('?')[1].split('=')[1]
+
+    document.title = label;
+    $('#labelName').html(label)
+    var currentPageNum = 1
+    getData(1)
+
+    function getData(page) {
+        $.get(HOST + '/api/label/' + label, {
+            page: page,
+            limit: 10
+        }, (result) => {
+            clearContent()
+            var listHtml = ''
+            result.array.forEach(element => {
+                listHtml += addContent(element)
+            });
+            var container = document.getElementById('content-inner')
+            container.innerHTML = listHtml + container.innerHTML
+            var pageCount = Math.ceil(result.count / 10)
+            generatePageNum(currentPageNum, pageCount)
+        })
+    }
+
+    function clearContent() {
+        var list = $('.recent-post-item')
+        for (var i = 0; i < list.length; i++) {
+            $(list[i]).remove()
+        }
+    }
+
+    function addContent(data) {
+        var contentHtml = '<div class="recent-post-item"><a class="article-title"  onclick="blogMore(' + data.id
+        contentHtml += ')">' + data.name + '</a><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> ' + data.time.split('T')[0] + '</time><span class="article-meta"><span class="article-meta__separator">|</span>'
+        contentHtml += '<i class="fa fa-inbox article-meta__icon" aria-hidden="true"></i><a class="article-meta__categories" href="category.html?id=' + data.classification + '">' + data.classificationName + '</a></span><span class="article-meta tags"><span class="article-meta__separator">|</span>'
+        var labels = data.labels.split(';')
+        for (var i = 0; i < labels.length - 1; i++) {
+            contentHtml += '<i class="fa fa-tag article-meta__icon" aria-hidden="true"></i>'
+            contentHtml += '<a class="article-meta__tags" href="label.html?labelName=' + labels[i] + '">' + labels[i] + '</a><span class="article-meta__link">-</span>'
+        }
+
+        if (labels.length > 0) {
+            contentHtml += '<i class="fa fa-tag article-meta__icon" aria-hidden="true"></i>'
+            contentHtml += '<a class="article-meta__tags" href="label.html?labelName=' + labels[i] + '">' + labels[labels.length - 1] + '</a></span>'
+        }
+
+        contentHtml += '<div class="content">' + data.brief + '</div>'
+        contentHtml += '<a class="more" onclick="blogMore(' + data.id + ')" style="margin-top: 14px">Read more</a>'
+        contentHtml += '<hr></div>'
+        return contentHtml
+    }
+
+    function generatePageNum(currentPage, count) {
+        var pageHtml = ''
+        var i = 1
+        if (currentPage > 1) {
+            pageHtml += '<a class="extend prev" rel="prev" onclick="changePageNum(' + (currentPage - 1) + ')"><i class="fa fa-chevron-left"></i></a>'
+        }
+        if (currentPage <= count / 2) {
+            for (; i <= currentPage; i++) {
+                if (i === currentPage) {
+                    pageHtml += '<span class="page-number current">' + i + '</span>'
+                } else {
+                    pageHtml += '<a class="page-number" onclick="changePageNum(' + i + ')">' + i + '</a>'
+                }
+            }
+            if (count > 2) {
+                pageHtml += '<span class="space">&hellip;</span>'
+            }
+            if (count > 1) {
+                pageHtml += '<a class="page-number" onclick="changePageNum(' + count + ')">' + count + '</a>'
+            }
+
+        } else {
+            pageHtml += '<a class="page-number" onclick="changePageNum(' + 1 + ')">' + 1 + '</a>'
+            if (count > 2) {
+                pageHtml += '<span class="space">&hellip;</span>'
+            }
+            for (i = currentPage; i <= count; i++) {
+                if (i === currentPage) {
+                    pageHtml += '<span class="page-number current">' + i + '</span>'
+                } else {
+                    pageHtml += '<a class="page-number" onclick="changePageNum(' + i + ')">' + i + '</a>'
+                }
+            }
+        }
+
+        if (currentPage < count) {
+            pageHtml += '<a class="extend prev" rel="prev" onclick="changePageNum(' + (currentPage + 1) + ')"><i class="fa fa-chevron-right"></i></a>'
+        }
+
+        $('#page-container').html(pageHtml)
+    }
+
+    function blogMore(id) {
+        window.location.href = 'blog.html?id=' + id
+    }
+
+    function changePageNum(pageNum) {
+        currentPageNum = pageNum
+        getData(pageNum)
+    }
+</script>
+<script src="js/userinfo.js"></script>
+
+</html>

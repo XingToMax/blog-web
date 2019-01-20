@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="">
+
+    <meta name="keywords" content="">
+    <meta name="author" content="Tomax,undefined">
+    <meta name="copyright" content="Tomax">
+    <title>Categories</title>
+    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+    <link rel="dns-prefetch" href="https://cdn.staticfile.org">
+    <link rel="dns-prefetch" href="https://cdn.bootcss.com">
+    <link rel="dns-prefetch" href="https://creativecommons.org">
+    <style>
+        a:hover {
+            cursor: pointer
+        }
+    </style>
+</head>
+
+<body><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i>
+    <div id="sidebar">
+        <div class="author-info">
+            <div class="author-info__avatar text-center"><img id="avatar"></div>
+            <div class="author-info__name text-center" id="username">Tomax</div>
+            <div class="author-info__description text-center" id="signature">不忘初心， 方得始终</div>
+            <hr>
+            <div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="timeline.html"><span class="pull-left">Articles</span><span class="pull-right" id="sum-blog">52</span></a>
+                <a class="author-info-articles__tags article-meta" href="labels.html"><span class="pull-left">Tags</span><span class="pull-right" id="sum-label"></span></a>
+                <a class="author-info-articles__categories article-meta" href="categories.html"><span class="pull-left">Categories</span><span class="pull-right" id="sum-cls"></span></a>
+            </div>
+            <hr>
+            <div class="author-info-links">
+                <div class="author-info-links__title text-center">友情链接</div>
+                <div id="link-container"></div>
+            </div>
+        </div>
+    </div>
+    <nav id="nav" style="">
+        <div id="page-header"><span class="pull-left"> <a id="site-name" href="index.html">Tomax</a></span><i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i>
+            <span class="pull-right menus">
+                <a class="site-page" href="index.html">主页</a>
+                <a class="site-page" href="timeline.html">时间轴</a><a class="site-page" href="labels.html">标签</a>
+                <a class="site-page" href="categories.html">分类</a>
+                <a class="site-page" href="resource.html">资源</a>
+                <a class="site-page" href="about.html">关于</a>
+            </span>
+        </div>
+        <div id="site-info">
+            <div id="site-title">Tomax</div>
+            <div id="site-sub-title">不 忘 初 心 ，方 得 始 终</div>
+            <div id="site-social-icons"> <a class="social-icon" href="https://github.com/XingToMax" target="_blank"><i class="fa fa-github"></i></a></div>
+        </div>
+    </nav>
+    <div id="content-outer">
+        <div class="layout" id="content-inner" style="opacity: 1; display: block; transform: translateY(0px);">
+            <div id="post-content">
+                <div class="category-lists">
+                    <div class="category__title">Categories - <span class="category__amount" id="cate-count"></span></div>
+                    <div>
+                        <ul class="category-list" id="list-container"></ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <div class="layout" id="footer">
+            <div class="copyright">&copy;2017 - 2018 By Tomax</div>
+        </div>
+    </footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i>
+    <script src="js/host.js"></script>
+    <script src="js/third-party/anime.min.js"></script>
+    <script src="js/third-party/jquery.min.js"></script>
+    <script src="js/third-party/jquery.fancybox.min.js"></script>
+    <script src="js/third-party/velocity.min.js"></script>
+    <script src="js/third-party/velocity.ui.min.js"></script>
+    <script src="js/utils.js?version=1.5.3"></script>
+    <script src="js/fancybox.js?version=1.5.3"></script>
+    <script src="js/sidebar.js?version=1.5.3"></script>
+    <script src="js/copy.js?version=1.5.3"></script>
+    <script src="js/fireworks.js?version=1.5.3"></script>
+    <script src="js/transition.js?version=1.5.3"></script>
+    <script src="js/scroll.js?version=1.5.3"></script>
+    <script src="js/head.js?version=1.5.3"></script>
+</body>
+<script>
+    $.get(HOST + '/api/classification', (result) => {
+        $('#cate-count').html(result.count)
+        $('#list-container').html('')
+        result.array.forEach(element => $('#list-container').append(constructNodeHtml(element)))
+    })
+
+    function constructNodeHtml(node) {
+        var nodeHtml = '<li class="category-list-item"><a class="category-list-link" href="category.html?id=' + node.id + '">' + node.name + '</a><span class="category-list-count">' + node.blogCount + '</span>'
+        if (node.sons.length > 0) {
+            nodeHtml += '<ul class="category-list-child">'
+        }
+        node.sons.forEach(element => nodeHtml += constructNodeHtml(element))
+        if (node.sons.length > 0) {
+            nodeHtml += '</ul>'
+        }
+        nodeHtml += '</li>'
+        return nodeHtml
+    }
+</script>
+<script src="js/userinfo.js"></script>
+
+</html>
