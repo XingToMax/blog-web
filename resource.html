@@ -48,6 +48,10 @@
             white-space: nowrap;
             overflow: hidden;
         }
+
+        .none-item {
+            font-size: 32px;
+        }
     </style>
 </head>
 
@@ -88,7 +92,7 @@
     </nav>
     <div id="content-outer">
         <div class="layout" id="content-inner">
-
+            
         </div>
     </div>
     <footer>
@@ -134,12 +138,20 @@
     }
     $.get(HOST + '/api/file', {}, result => {
             let itemHtml = ''
+            if(result.count === 0) {
+                displayNoneItem()
+            }
             result.array.forEach(element => {
                 itemHtml += isMobile() ? getMobileItemHtml(element) : getPCItemHtml(element)
             });
             $('#content-inner').html(itemHtml)
         })
         // TODO : 悬浮item显示下载、详情icon，点击icon下载或进入详情页
+        function displayNoneItem() {
+            let noneItemHtml = '<p class="none-item">暂无可下载资源</p>'
+            $('#content-inner').html(noneItemHtml)
+            $('#content-inner').attr('align', 'center')
+        }
 </script>
 <script src="js/userinfo.js"></script>
 
