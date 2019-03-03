@@ -96,6 +96,7 @@
     <footer>
         <div class="layout" id="footer" style="opacity: 1; display: block; transform: translateY(0px);">
             <div class="copyright">©2018 - 2019 By Tomax</div>
+            <div class="copyright">苏ICP备17068184号</div>
         </div>
     </footer>
     <i class="fa fa-arrow-up" id="go-up" aria-hidden="true" style="transform: rotateZ(360deg) translateX(-30px); opacity: 1;"></i>
@@ -182,7 +183,9 @@
             var labels = data.data.labels.split(';')
             var labelHtml = ''
             for (var i = 0; i < labels.length; i++) {
-                labelHtml += '<a class="post-meta__tags" href="label.html?labelName=' + labels[i] + '">' + labels[i] + '</a>'
+                if (labels[i].length > 0) {
+                    labelHtml += '<a class="post-meta__tags" href="label.html?labelName=' + labels[i] + '">' + labels[i] + '</a>'
+                }
             }
             $('#labelContainer').html(labelHtml);
 

@@ -48,7 +48,7 @@
             white-space: nowrap;
             overflow: hidden;
         }
-
+        
         .none-item {
             font-size: 32px;
         }
@@ -92,12 +92,13 @@
     </nav>
     <div id="content-outer">
         <div class="layout" id="content-inner">
-            
+
         </div>
     </div>
     <footer>
         <div class="layout" id="footer">
-            <div class="copyright">&copy;2017 - 2018 By Tomax</div>
+            <div class="copyright">©2018 - 2019 By Tomax</div>
+            <div class="copyright">苏ICP备17068184号</div>
         </div>
     </footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i>
     <script src="js/host.js"></script>
@@ -138,7 +139,7 @@
     }
     $.get(HOST + '/api/file', {}, result => {
             let itemHtml = ''
-            if(result.count === 0) {
+            if (result.count === 0) {
                 displayNoneItem()
             }
             result.array.forEach(element => {
@@ -147,11 +148,11 @@
             $('#content-inner').html(itemHtml)
         })
         // TODO : 悬浮item显示下载、详情icon，点击icon下载或进入详情页
-        function displayNoneItem() {
-            let noneItemHtml = '<p class="none-item">暂无可下载资源</p>'
-            $('#content-inner').html(noneItemHtml)
-            $('#content-inner').attr('align', 'center')
-        }
+    function displayNoneItem() {
+        let noneItemHtml = '<p class="none-item">暂无可下载资源</p>'
+        $('#content-inner').html(noneItemHtml)
+        $('#content-inner').attr('align', 'center')
+    }
 </script>
 <script src="js/userinfo.js"></script>
 
